@@ -72,3 +72,5 @@ resource "aws_s3_bucket" "storage" {
 
   bucket = "ecommerce-${var.environment}-${each.value}-debjani123"
 }
+
+data "aws_region" "current" {}
