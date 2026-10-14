@@ -9,12 +9,10 @@ terraform {
 provider "aws" {
   region = "ap-south-1"
 }
-resource "aws_s3_bucket" "product_assets" {
-  bucket = local.bucket_name
-  tags = {
-    Environment = "dev"
-    Purpose     = "product-assets"
-  }
+
+module "storage" {
+  source      = "./modules/storage"
+  bucket_name = local.bucket_name
 }
 
 resource "aws_vpc" "main" {
