@@ -19,8 +19,9 @@ resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
   tags = {
     Name        = "ecommerce-${var.environment}-vpc"
-    Environment = var.environment
-    Purpose     = "ecommerce-network"
+    Environment = "qa"
+    Project     = "ecommerce"
+    Owner       = "terraform"
   }
 }
 
@@ -67,5 +68,15 @@ resource "aws_instance" "web" {
     Name        = "ecommerce-${var.environment}-web-${count.index + 1}"
     Environment = var.environment
     Purpose     = "ecommerce-web"
+  }
+  # Prevents Terraform from replacing the instance if the AMI changes later
+  lifecycle {
+    ignore_changes = [
+      ami,
+    ]
+    create_before_destroy = true
+    replace_triggered_by = [
+      aws_security_group.web_sg
+    ]
   }
 }
